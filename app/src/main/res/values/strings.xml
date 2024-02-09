@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">KinopoiskFintech</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="popular_button_title">Популярные</string>
+    <string name="favourites_button_title">Избранное</string>
 </resources>
