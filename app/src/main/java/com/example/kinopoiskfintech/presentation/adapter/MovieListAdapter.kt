@@ -14,7 +14,7 @@ class MovieListAdapter @Inject constructor() :
     ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback()) {
 
     var onFilmItemLongClickListener: ((Movie) -> Unit)? = null
-    var onFilmItemClickListener: ((Movie) -> Unit)? = null
+    var onFilmItemClickListener: ((Int) -> Unit)? = null
     var onReachEndListener: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -36,7 +36,7 @@ class MovieListAdapter @Inject constructor() :
                 true -> starImage.visibility = VISIBLE
                 false -> starImage.visibility = INVISIBLE
             }
-            root.setOnClickListener { onFilmItemClickListener?.invoke(film) }
+            root.setOnClickListener { onFilmItemClickListener?.invoke(film.filmId) }
             root.setOnLongClickListener {
                 onFilmItemLongClickListener?.invoke(film)
                 true

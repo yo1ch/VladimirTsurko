@@ -5,7 +5,6 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.kinopoiskfintech.databinding.FragmentMainBinding
-import com.example.kinopoiskfintech.domain.models.Movie
 import com.example.kinopoiskfintech.presentation.BaseFragment
 import com.example.kinopoiskfintech.presentation.ListItemClickListener
 import com.example.kinopoiskfintech.presentation.favoritemovies.FavoriteMoviesFragment
@@ -64,29 +63,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private fun setupToggleButtons() {
         with(binding.buttonsPanel){
             popularButton.setOnClickListener {
-                binding.fragmentPager.currentItem = 0
+                binding.fragmentPager.currentItem = PopularMoviesFragment.FRAGMENT_ID
             }
             favoriteButton.setOnClickListener {
-                binding.fragmentPager.currentItem = 1
+                binding.fragmentPager.currentItem = FavoriteMoviesFragment.FRAGMENT_ID
             }
         }
     }
-
-
-    override fun click() {
-        findNavController().navigate(MainFragmentDirections.actionMovieDetails(
-            Movie(
-                filmId = 1,
-                nameRu = "Кавказская пленница",
-                year = 2000,
-                countries = "Россия, Грузия",
-                genres = "Комедия, Ужасы",
-                posterUrl = "https://kinopoiskapiunofficial.tech/images/posters/kp/301.jpg",
-                posterUrlPreview = "",
-                description = "Вполне крутой фильмец",
-                isFavourite = true,
-            )
-        ))
+    override fun onMovieClick(movieId: Int) {
+        findNavController().navigate(MainFragmentDirections.actionMovieDetails(movieId))
     }
 
 }

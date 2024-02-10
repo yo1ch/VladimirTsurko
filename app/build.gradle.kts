@@ -65,7 +65,9 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
-    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    implementation ("com.github.bumptech.glide:glide:4.15.0")
     kapt("com.github.bumptech.glide:compiler:4.14.2")
 
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")

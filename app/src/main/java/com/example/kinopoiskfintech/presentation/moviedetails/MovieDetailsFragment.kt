@@ -10,6 +10,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -20,6 +22,12 @@ import com.example.kinopoiskfintech.KinopoiskApp
 import com.example.kinopoiskfintech.databinding.FragmentMovieDetailsBinding
 import com.example.kinopoiskfintech.presentation.BaseFragment
 import com.bumptech.glide.request.target.Target
+import com.example.kinopoiskfintech.domain.models.Movie
+import com.example.kinopoiskfintech.presentation.ViewModelFactory
+import com.example.kinopoiskfintech.utils.ResourceState
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 class MovieDetailsFragment :
     BaseFragment<FragmentMovieDetailsBinding>(FragmentMovieDetailsBinding::inflate) {
@@ -29,14 +37,21 @@ class MovieDetailsFragment :
     }
 
     private val args by navArgs<MovieDetailsFragmentArgs>()
-    private val movie by lazy {
-        args.movie
+    private val movieId by lazy {
+        args.movieId
+    }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MovieDetailsViewModel::class.java]
     }
 
     override fun onStart() {
         super.onStart()
         setTransluentStatusbar()
         setStatusBarIconTheme(isDarkTheme = true)
+        viewModel.getMovieById(movieId)
     }
 
     override fun onAttach(context: Context) {
@@ -46,7 +61,7 @@ class MovieDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.imageViewArrow) { v, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.leftArrow) { v, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.updatePadding(
                 top = insets.top
@@ -56,50 +71,61 @@ class MovieDetailsFragment :
             }
             WindowInsetsCompat.CONSUMED
         }
-        setupScreen()
-
+        binding.leftArrow.setOnClickListener { navigateBack() }
+        observeData()
     }
 
-    private fun setupScreen() {
-        with(binding) {
-            Glide.with(root)
-                .load(movie.posterUrl)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false
+    private fun observeData() {
+        viewModel.movies
+            .onEach { movie ->
+                when (movie) {
+                    is ResourceState.Loading -> {}
+                    is ResourceState.Error -> {}
+                    is ResourceState.Content -> {
+                        showInfo(movie.content)
                     }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: com.bumptech.glide.load.DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        setInfo()
-                        return false
-                    }
-                })
-                .into(imagePoster)
-            imageViewArrow.setOnClickListener { navigateBack() }
-        }
+                }
+            }.launchIn(lifecycleScope)
     }
 
-    private fun setInfo() {
-        with(binding) {
-            tvMovieTitle.text = movie.nameRu
-            tvMovieDescription.text = movie.description
-            tvGenres.text = movie.genres
-            tvCountries.text = movie.countries
-            tvGenresTitle.visibility = VISIBLE
-            tvCountriesTitle.visibility = VISIBLE
+    private fun showInfo(
+        movie: Movie
+    ) {
+        with(movie) {
+            with(binding) {
+                Glide.with(root)
+                    .load(posterUrl)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: com.bumptech.glide.load.DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            tvMovieTitle.text = nameRu
+                            tvMovieDescription.text = description
+                            tvGenres.text = genres
+                            tvCountries.text = countries
+                            tvGenresTitle.visibility = VISIBLE
+                            tvCountriesTitle.visibility = VISIBLE
+                            return false
+                        }
+                    })
+                    .into(imagePoster)
+            }
         }
+
     }
 
     private fun navigateBack() {

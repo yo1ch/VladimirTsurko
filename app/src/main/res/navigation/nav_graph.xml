@@ -16,8 +16,14 @@
         android:label="fragment_movie_details"
         tools:layout="@layout/fragment_movie_details" >
         <argument
-            android:name="movie"
-            app:argType="com.example.kinopoiskfintech.domain.models.Movie" />
+            android:name="movieId"
+            app:argType="integer" />
     </fragment>
-    <action android:id="@+id/action_movieDetails" app:destination="@id/movieDetailsFragment" />
+    <action
+        android:id="@+id/action_movieDetails"
+        app:destination="@id/movieDetailsFragment"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out"
+        app:popEnterAnim="@anim/fade_in"
+        app:popExitAnim="@anim/fade_out" />
 </navigation>

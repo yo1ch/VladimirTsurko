@@ -2,6 +2,6 @@ package com.example.kinopoiskfintech.presentation
 
 interface ListItemClickListener {
 
-    fun click()
+    fun onMovieClick(movieId: Int)
 
 }

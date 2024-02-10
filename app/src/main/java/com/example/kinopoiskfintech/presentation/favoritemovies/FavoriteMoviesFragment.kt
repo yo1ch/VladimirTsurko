@@ -35,7 +35,9 @@ class FavoriteMoviesFragment : BaseFragment<FragmentFavoriteFilmsBinding>(Fragme
     private fun setupRecyclerView() {
         binding.rvFavorite.adapter = filmsAdapter
         binding.rvFavorite.itemAnimator = null
-        filmsAdapter.onFilmItemClickListener = { listItemClickListener.click() }
+        filmsAdapter.onFilmItemClickListener = { movieId ->
+            listItemClickListener.onMovieClick(movieId)
+        }
         filmsAdapter.onFilmItemLongClickListener = { }
         filmsAdapter.onReachEndListener = { }
     }
