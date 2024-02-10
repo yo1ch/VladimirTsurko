@@ -3,16 +3,19 @@ package com.example.kinopoiskfintech.presentation.mainfragment
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2.GONE
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import androidx.viewpager2.widget.ViewPager2.VISIBLE
 import com.example.kinopoiskfintech.databinding.FragmentMainBinding
 import com.example.kinopoiskfintech.presentation.BaseFragment
-import com.example.kinopoiskfintech.presentation.ListItemClickListener
+import com.example.kinopoiskfintech.presentation.mainfragment.listeners.ListItemClickListener
 import com.example.kinopoiskfintech.presentation.favoritemovies.FavoriteMoviesFragment
+import com.example.kinopoiskfintech.presentation.mainfragment.listeners.LoadingStateListener
 import com.example.kinopoiskfintech.presentation.popularmovies.PopularMoviesFragment
 
 
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate),
-    ListItemClickListener {
+    ListItemClickListener, LoadingStateListener {
 
     private lateinit var pagerAdapter: MainFragmentPagerAdapter
 
@@ -72,6 +75,34 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
     override fun onMovieClick(movieId: Int) {
         findNavController().navigate(MainFragmentDirections.actionMovieDetails(movieId))
+    }
+
+    override fun onLoadingStart() {
+        with(binding){
+            progressBar.visibility = VISIBLE
+            fragmentPager.visibility = GONE
+            buttonsPanel.buttonsPanelContainer.visibility = GONE
+            binding.fragmentPager.alpha = 0f
+            binding.buttonsPanel.buttonsPanelContainer.alpha = 0f
+        }
+    }
+
+    override fun onLoadingEnd() {
+        with(binding){
+            progressBar.visibility = GONE
+            fragmentPager.visibility = VISIBLE
+            buttonsPanel.buttonsPanelContainer.visibility = VISIBLE
+            binding.fragmentPager
+                .animate()
+                .alpha(1f)
+                .setDuration(500)
+                .setListener(null)
+            binding.buttonsPanel.buttonsPanelContainer
+                .animate()
+                .alpha(1f)
+                .setDuration(500)
+                .setListener(null)
+        }
     }
 
 }

@@ -45,10 +45,11 @@ abstract class BaseFragment<VB: ViewBinding>(
 
     open fun setTransluentStatusbar(){
         requireActivity().window.apply {
-            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            statusBarColor = Color.TRANSPARENT
+            requireActivity().window.statusBarColor =
+                requireContext().getColor(R.color.transparent)
         }
     }
     @Suppress("deprecation")

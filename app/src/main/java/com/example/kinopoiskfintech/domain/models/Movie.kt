@@ -1,9 +1,5 @@
 package com.example.kinopoiskfintech.domain.models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
 data class Movie(
     val filmId: Int,
     val nameRu: String,
@@ -13,5 +9,5 @@ data class Movie(
     val posterUrl: String,
     val posterUrlPreview: String,
     val description: String,
-    var isFavourite: Boolean,
-) : Parcelable
+    var isFavourite: Boolean = false,
+)

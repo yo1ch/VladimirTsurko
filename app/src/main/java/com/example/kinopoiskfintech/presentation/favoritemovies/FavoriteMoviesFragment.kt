@@ -6,7 +6,7 @@ import android.view.View
 import com.example.kinopoiskfintech.KinopoiskApp
 import com.example.kinopoiskfintech.databinding.FragmentFavoriteFilmsBinding
 import com.example.kinopoiskfintech.presentation.BaseFragment
-import com.example.kinopoiskfintech.presentation.ListItemClickListener
+import com.example.kinopoiskfintech.presentation.mainfragment.listeners.ListItemClickListener
 import com.example.kinopoiskfintech.presentation.adapter.MovieListAdapter
 import javax.inject.Inject
 
@@ -34,7 +34,6 @@ class FavoriteMoviesFragment : BaseFragment<FragmentFavoriteFilmsBinding>(Fragme
 
     private fun setupRecyclerView() {
         binding.rvFavorite.adapter = filmsAdapter
-        binding.rvFavorite.itemAnimator = null
         filmsAdapter.onFilmItemClickListener = { movieId ->
             listItemClickListener.onMovieClick(movieId)
         }

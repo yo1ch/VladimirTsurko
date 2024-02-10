@@ -10,10 +10,15 @@ import javax.inject.Inject
 class MoviesRepositoryImpl @Inject constructor(
     private val moviesApi: MoviesApi,
 ): MoviesRepository {
-    override suspend fun loadAllFilms(): List<Movie> = emptyList()
-
     override suspend fun getMovieById(id: Int): Result<Movie> {
         val response = moviesApi.getMovieById(id)
+        return response.toResult().map { movieResponse ->
+            movieResponse.toModel()
+        }
+    }
+
+    override  suspend fun getPopularMovies(): Result<List<Movie>> {
+        val response = moviesApi.getTopPopularMovies(1)
         return response.toResult().map { movieResponse ->
             movieResponse.toModel()
         }

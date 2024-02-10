@@ -8,8 +8,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MoviesApi {
-    @GET("top?type=TOP_100_POPULAR_FILMS")
-    suspend fun getTopPopularMovies(@Query("page") page: Int): Response<MoviePreviewListDto>
+    @GET("api/v2.2/films/top?type=TOP_100_POPULAR_FILMS")
+    suspend fun getTopPopularMovies(
+        @Query("page") page: Int
+    ): Response<MoviePreviewListDto>
     @GET("api/v2.2/films/{id}")
     suspend fun getMovieById(
         @Path("id") id: Int

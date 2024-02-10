@@ -1,4 +1,4 @@
-package com.example.kinopoiskfintech.presentation
+package com.example.kinopoiskfintech.presentation.mainfragment.listeners
 
 interface ListItemClickListener {
 
