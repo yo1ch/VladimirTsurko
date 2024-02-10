@@ -6,7 +6,6 @@ import com.spinoza.moviesforfintech.data.network.model.CountryDto
 import com.spinoza.moviesforfintech.data.network.model.GenreDto
 import com.spinoza.moviesforfintech.data.network.model.MovieDto
 import com.spinoza.moviesforfintech.data.network.model.MoviePreviewDto
-import com.spinoza.moviesforfintech.data.network.model.MoviePreviewListDto
 import java.util.stream.Collectors
 
 
@@ -22,11 +21,9 @@ fun MovieDto.toModel() = Movie(
         isFavourite =true,
     )
 
-fun MoviePreviewListDto.toModel(): List<Movie> = films.map { moviePreviewDto ->
-    moviePreviewDto.toModel()
-}
-
-fun MoviePreviewDto.toModel(): Movie = Movie(
+fun MoviePreviewDto.toModel(
+    isFavorite: Boolean
+): Movie = Movie(
     filmId = filmId,
     nameRu = nameRu,
     year = year,
@@ -35,6 +32,7 @@ fun MoviePreviewDto.toModel(): Movie = Movie(
     posterUrlPreview = posterUrlPreview,
     posterUrl = posterUrl,
     description = String(),
+    isFavourite = isFavorite
 )
 
 fun Movie.toDbModel(): MovieDbModel = MovieDbModel(

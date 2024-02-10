@@ -18,4 +18,7 @@ interface MoviesDao {
 
     @Query("DELETE FROM $FAVOURITE_TABLE WHERE filmId=:filmId")
     suspend fun removeFilmFromFavourite(filmId: Int)
+
+    @Query("SELECT EXISTS (SELECT * FROM $FAVOURITE_TABLE WHERE filmId=:filmId)")
+    suspend fun isFilmFavourite(filmId: Int): Boolean
 }

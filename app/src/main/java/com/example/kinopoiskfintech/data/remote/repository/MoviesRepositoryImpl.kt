@@ -15,6 +15,9 @@ class MoviesRepositoryImpl @Inject constructor(
     private val moviesApi: MoviesApi,
     private val moviesDao: MoviesDao,
 ) : MoviesRepository {
+
+    private var currentPage = FIRST_PAGE
+
     override suspend fun getMovieById(id: Int): Result<Movie> {
         val response = moviesApi.getMovieById(id)
         return response.toResult().map { movieResponse ->
@@ -35,9 +38,16 @@ class MoviesRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getPopularMovies(): Result<List<Movie>> {
-        val response = moviesApi.getTopPopularMovies(1)
+        val page = if(currentPage < LAST_PAGE) currentPage++ else currentPage
+        val response = moviesApi.getTopPopularMovies(page)
         return response.toResult().map { movieResponse ->
-            movieResponse.toModel()
+            movieResponse.films.map {
+                it.toModel(moviesDao.isFilmFavourite(it.filmId))
+            }
         }
+    }
+    companion object{
+        private const val FIRST_PAGE = 1
+        private const val LAST_PAGE = 5
     }
 }

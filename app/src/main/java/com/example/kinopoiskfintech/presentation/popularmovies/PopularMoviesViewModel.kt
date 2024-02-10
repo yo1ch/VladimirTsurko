@@ -16,6 +16,9 @@ class PopularMoviesViewModel @Inject constructor(
     private val changeMovieFavouriteStatusUseCase: ChangeMovieFavouriteStatusUseCase,
 ) : ViewModel() {
 
+
+    val moviesList = mutableListOf<Movie>()
+
     private val _movies: MutableStateFlow<ResourceState<List<Movie>>> =
         MutableStateFlow(ResourceState.Loading)
     val movies = _movies.asStateFlow()
@@ -30,14 +33,15 @@ class PopularMoviesViewModel @Inject constructor(
         }
     }
 
-    private fun getMovies() {
+    fun getMovies() {
         viewModelScope.launch {
             getPopularMoviesUseCase()
-                .onSuccess { movies ->
-                    _movies.emit(ResourceState.Content(content = movies))
+                .onSuccess {
+                    moviesList.addAll(it)
                 }.onFailure {
-
+                    _movies.emit(ResourceState.Error())
                 }
+            _movies.emit(ResourceState.Content(content = moviesList.toList()))
         }
     }
 
