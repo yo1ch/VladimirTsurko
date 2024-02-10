@@ -3,6 +3,7 @@ package com.example.kinopoiskfintech.presentation.popularmovies
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kinopoiskfintech.domain.models.Movie
+import com.example.kinopoiskfintech.domain.usecase.ChangeMovieFavouriteStatusUseCase
 import com.example.kinopoiskfintech.domain.usecase.GetPopularMoviesUseCase
 import com.example.kinopoiskfintech.utils.ResourceState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +12,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PopularMoviesViewModel @Inject constructor(
-    private val getPopularMoviesUseCase: GetPopularMoviesUseCase
+    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
+    private val changeMovieFavouriteStatusUseCase: ChangeMovieFavouriteStatusUseCase,
 ) : ViewModel() {
 
     private val _movies: MutableStateFlow<ResourceState<List<Movie>>> =
@@ -20,6 +22,12 @@ class PopularMoviesViewModel @Inject constructor(
 
     init {
         getMovies()
+    }
+
+    fun changeMovieFavouriteStatus(movie: Movie){
+        viewModelScope.launch {
+            changeMovieFavouriteStatusUseCase(movie)
+        }
     }
 
     private fun getMovies() {

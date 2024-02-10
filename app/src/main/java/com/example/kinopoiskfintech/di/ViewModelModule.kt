@@ -1,6 +1,7 @@
 package com.example.kinopoiskfintech.di
 
 import androidx.lifecycle.ViewModel
+import com.example.kinopoiskfintech.presentation.favoritemovies.FavoriteMoviesViewModel
 import com.example.kinopoiskfintech.presentation.moviedetails.MovieDetailsViewModel
 import com.example.kinopoiskfintech.presentation.popularmovies.PopularMoviesViewModel
 import dagger.Binds
@@ -18,4 +19,9 @@ interface ViewModelModule {
     @ViewModelKey(PopularMoviesViewModel::class)
     @Binds
     fun bindPopularMoviesViewModel(impl: PopularMoviesViewModel): ViewModel
+
+    @IntoMap
+    @ViewModelKey(FavoriteMoviesViewModel::class)
+    @Binds
+    fun bindFavouriteMoviesViewModel(impl: FavoriteMoviesViewModel): ViewModel
 }

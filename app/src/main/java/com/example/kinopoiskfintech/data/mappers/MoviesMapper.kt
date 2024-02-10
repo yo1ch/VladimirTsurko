@@ -1,5 +1,6 @@
-package com.example.kinopoiskfintech.data.remote.mappers
+package com.example.kinopoiskfintech.data.mappers
 
+import com.example.kinopoiskfintech.data.local.models.MovieDbModel
 import com.example.kinopoiskfintech.domain.models.Movie
 import com.spinoza.moviesforfintech.data.network.model.CountryDto
 import com.spinoza.moviesforfintech.data.network.model.GenreDto
@@ -21,11 +22,9 @@ fun MovieDto.toModel() = Movie(
         isFavourite =true,
     )
 
-
 fun MoviePreviewListDto.toModel(): List<Movie> = films.map { moviePreviewDto ->
     moviePreviewDto.toModel()
 }
-
 
 fun MoviePreviewDto.toModel(): Movie = Movie(
     filmId = filmId,
@@ -38,6 +37,28 @@ fun MoviePreviewDto.toModel(): Movie = Movie(
     description = String(),
 )
 
+fun Movie.toDbModel(): MovieDbModel = MovieDbModel(
+    filmId = filmId,
+    nameRu = nameRu,
+    year = year,
+    countries = countries,
+    genres = genres,
+    posterUrl = posterUrl,
+    posterUrlPreview = posterUrlPreview,
+    description = description
+)
+
+fun MovieDbModel.toModel(): Movie = Movie(
+    filmId = filmId,
+    nameRu = nameRu,
+    year = year,
+    countries = countries,
+    genres = genres,
+    posterUrl = posterUrl,
+    posterUrlPreview = posterUrlPreview,
+    description = description,
+    isFavourite = true
+)
 private fun countriesToString(
     countriesDto: List<CountryDto>
 ): String =

@@ -71,7 +71,9 @@ class PopularMoviesFragment :
         filmsAdapter.onFilmItemClickListener = { movieId ->
             listItemClickListener.onMovieClick(movieId = movieId)
         }
-        filmsAdapter.onFilmItemLongClickListener = { }
+        filmsAdapter.onFilmItemLongClickListener = { movie ->
+            viewModel.changeMovieFavouriteStatus(movie)
+        }
         filmsAdapter.onReachEndListener = { }
 
     }

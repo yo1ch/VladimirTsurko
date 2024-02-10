@@ -1,6 +1,9 @@
 package com.example.kinopoiskfintech.di
 
 
+import android.app.Application
+import com.example.kinopoiskfintech.data.local.MoviesDao
+import com.example.kinopoiskfintech.data.local.MoviesDatabase
 import com.example.kinopoiskfintech.data.remote.MoviesApi
 import dagger.Module
 import dagger.Provides
@@ -40,10 +43,14 @@ interface DataModule {
             .client(okHttpClient)
             .build()
 
-
         @Provides
         fun bindReceiptApi(retrofit: Retrofit): MoviesApi =
             retrofit.create(MoviesApi::class.java)
+
+        @AppScope
+        @Provides
+        fun provideFilmsDao(application: Application): MoviesDao =
+            MoviesDatabase.getInstance(application).moviesDao()
 
 
         private const val BASE_URL = "https://kinopoiskapiunofficial.tech/"
