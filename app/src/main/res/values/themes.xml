@@ -1,5 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.KinopoiskFintech" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="Theme.KinopoiskFintech" parent="Base.Theme.KinopoiskFintech" />

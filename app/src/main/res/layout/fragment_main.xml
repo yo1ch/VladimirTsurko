@@ -4,8 +4,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
     tools:context=".presentation.mainfragment.MainFragment">
+
+
+    <include
+        android:id="@+id/main_fragment_toolbar"
+        layout="@layout/main_fragment_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/fragment_pager"
@@ -14,7 +25,7 @@
         app:layout_constraintBottom_toTopOf="@+id/buttons_panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/main_fragment_toolbar" />
 
     <include
         android:id="@+id/buttons_panel"

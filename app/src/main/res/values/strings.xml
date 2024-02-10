@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="popular_button_title">Популярные</string>
     <string name="favourites_button_title">Избранное</string>
+    <string name="genres_title">Жанры: </string>
+    <string name="countries_title">Страны: </string>
 </resources>

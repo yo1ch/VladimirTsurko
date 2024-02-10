@@ -6,4 +6,5 @@
     <color name="primary">#0094FF</color>
     <color name="onPrimary">#FFFFFF</color>
     <color name="onSecondary">#0094FF</color>
+    <color name="transparent">#00000000</color>
 </resources>

@@ -14,10 +14,13 @@ class MainFragmentPagerAdapter(
     override fun getItemCount(): Int = TABS_COUNT
 
     override fun createFragment(position: Int): Fragment {
-        return if (position == 0) {
-            PopularMoviesFragment()
-        }else FavoriteMoviesFragment()
+        return when(position){
+            PopularMoviesFragment.FRAGMENT_ID -> PopularMoviesFragment()
+            FavoriteMoviesFragment.FRAGMENT_ID -> FavoriteMoviesFragment()
+            else -> PopularMoviesFragment()
+        }
     }
+
 
     companion object {
         private const val TABS_COUNT = 2

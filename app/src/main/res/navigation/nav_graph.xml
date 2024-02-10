@@ -14,6 +14,10 @@
         android:id="@+id/movieDetailsFragment"
         android:name="com.example.kinopoiskfintech.presentation.moviedetails.MovieDetailsFragment"
         android:label="fragment_movie_details"
-        tools:layout="@layout/fragment_movie_details" />
-    <action android:id="@+id/action_movieDetails" app:destination="@id/movieDetailsFragment"/>
+        tools:layout="@layout/fragment_movie_details" >
+        <argument
+            android:name="movie"
+            app:argType="com.example.kinopoiskfintech.domain.models.Movie" />
+    </fragment>
+    <action android:id="@+id/action_movieDetails" app:destination="@id/movieDetailsFragment" />
 </navigation>
