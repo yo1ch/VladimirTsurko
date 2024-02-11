@@ -37,6 +37,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         setupViewPager()
     }
 
+
+
     private fun setupViewPager() {
         pagerAdapter = MainFragmentPagerAdapter(childFragmentManager, lifecycle)
         with(binding.fragmentPager){
@@ -50,8 +52,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                             with(binding) {
                                 buttonsPanel.popularButton.isSelected = true
                                 buttonsPanel.favoriteButton.isSelected = false
-                                mainFragmentToolbar.toolbarTitle.text =
-                                    PopularMoviesFragment.FRAGMENT_TITLE
                             }
                         }
 
@@ -59,8 +59,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                             with(binding) {
                                 buttonsPanel.favoriteButton.isSelected = true
                                 buttonsPanel.popularButton.isSelected = false
-                                mainFragmentToolbar.toolbarTitle.text =
-                                    FavoriteMoviesFragment.FRAGMENT_TITLE
                             }
                         }
                     }
