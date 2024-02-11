@@ -1,141 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
+
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <include
+        android:id="@+id/no_connection_error"
+        layout="@layout/no_connecion"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/movie_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="8dp"
-        tools:context=".presentation.moviedetails.MovieDetailsFragment">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/image_poster"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ImageContrastCheck"
-                tools:src="@tools:sample/avatars" />
-
-            <TextView
-                android:id="@+id/tv_movie_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="30dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/image_poster"
-                tools:text="@tools:sample/full_names" />
-
-            <TextView
-                android:id="@+id/tv_movie_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="30dp"
-                android:alpha="0.6"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_movie_title"
-                tools:text="@tools:sample/full_names" />
-
-            <TextView
-                android:id="@+id/tv_genres_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="4dp"
-                android:alpha="0.6"
-                android:text="@string/genres_title"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@+id/tv_genres"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_movie_description"
-                tools:visibility="visible" />
-
-            <TextView
-                android:id="@+id/tv_genres"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
-                android:alpha="0.6"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_genres_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_genres_title"
-                tools:text="@tools:sample/last_names" />
-
-            <TextView
-                android:id="@+id/tv_countries_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="4dp"
-                android:alpha="0.6"
-                android:text="@string/countries_title"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@+id/tv_countries"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_genres"
-                tools:visibility="visible" />
-
-            <TextView
-                android:id="@+id/tv_countries"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
-                android:alpha="0.6"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_countries_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_countries_title"
-                tools:text="@tools:sample/last_names" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-    <ImageView
-        android:id="@+id/left_arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="22dp"
-        android:src="@drawable/ic_arrow_left"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ImageContrastCheck" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-</FrameLayout>
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="8dp"
+            tools:context=".presentation.moviedetails.MovieDetailsFragment">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_poster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ImageContrastCheck"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/tv_movie_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="30dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/image_poster"
+                    tools:text="@tools:sample/full_names" />
+
+                <TextView
+                    android:id="@+id/tv_movie_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="30dp"
+                    android:alpha="0.6"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_movie_title"
+                    tools:text="@tools:sample/full_names" />
+
+                <TextView
+                    android:id="@+id/tv_genres_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="4dp"
+                    android:alpha="0.6"
+                    android:text="@string/genres_title"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_genres"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_movie_description"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_genres"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:alpha="0.6"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_genres_title"
+                    app:layout_constraintTop_toTopOf="@+id/tv_genres_title"
+                    tools:text="@tools:sample/last_names" />
+
+                <TextView
+                    android:id="@+id/tv_countries_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:alpha="0.6"
+                    android:text="@string/countries_title"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_countries"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_genres"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_countries"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:alpha="0.6"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_countries_title"
+                    app:layout_constraintTop_toTopOf="@+id/tv_countries_title"
+                    tools:text="@tools:sample/last_names" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <ImageView
+            android:id="@+id/left_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="22dp"
+            android:src="@drawable/ic_arrow_left"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ImageContrastCheck" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 
 

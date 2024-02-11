@@ -76,12 +76,15 @@ class MovieDetailsFragment :
     }
 
     private fun observeData() {
-        viewModel.movies
+        viewModel.movie
             .onEach { movie ->
                 when (movie) {
                     is ResourceState.Loading -> {}
-                    is ResourceState.Error -> {}
+                    is ResourceState.Error -> {
+                        showNoConnection()
+                    }
                     is ResourceState.Content -> {
+                        hideNoConnection()
                         showInfo(movie.content)
                     }
                 }
@@ -126,6 +129,19 @@ class MovieDetailsFragment :
             }
         }
 
+    }
+
+    private fun showNoConnection(){
+        binding.noConnectionError.retryButton.setOnClickListener {
+            viewModel.getMovieById(movieId)
+        }
+        binding.noConnectionError.noConnectionError.visibility = VISIBLE
+        binding.movieDetails.visibility = View.GONE
+    }
+
+    private fun hideNoConnection(){
+        binding.noConnectionError.noConnectionError.visibility = View.GONE
+        binding.movieDetails.visibility = VISIBLE
     }
 
     private fun navigateBack() {

@@ -20,14 +20,18 @@ class MoviesRepositoryImpl @Inject constructor(
     private var currentPage = FIRST_PAGE
 
     override suspend fun getMovieById(id: Int): Result<Movie> {
-        val movies = moviesDao.getDescriptionById(id)
-        return if (movies.isEmpty()) {
-            val response = moviesApi.getMovieById(id)
-            response.toResult().map { movieResponse ->
-                moviesDao.insertMovieDescription(movieResponse.toDescriptionDnModel())
-                movieResponse.toModel()
-            }
-        } else Result.success(movies.first().toModel())
+        return try{
+            val movies = moviesDao.getDescriptionById(id)
+            if (movies.isEmpty()) {
+                val response = moviesApi.getMovieById(id)
+                response.toResult().map { movieResponse ->
+                    moviesDao.insertMovieDescription(movieResponse.toDescriptionDnModel())
+                    movieResponse.toModel()
+                }
+            } else Result.success(movies.first().toModel())
+        }catch (e: Exception){
+            Result.failure(e)
+        }
 
 
     }

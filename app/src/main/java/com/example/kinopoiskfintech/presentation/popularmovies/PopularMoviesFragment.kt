@@ -50,9 +50,6 @@ class PopularMoviesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.noConnectionError.retryButton.setOnClickListener {
-            retryLoadData()
-        }
         setupToolbar()
         setupRecyclerView()
         observeViewModel()
@@ -167,6 +164,9 @@ class PopularMoviesFragment :
     }
 
     private fun showNoConnection(){
+        binding.noConnectionError.retryButton.setOnClickListener {
+            retryLoadData()
+        }
         binding.noConnectionError.noConnectionError.visibility = VISIBLE
         binding.rvPopular.visibility = GONE
         loadingStateListener.onLoadingEnd()

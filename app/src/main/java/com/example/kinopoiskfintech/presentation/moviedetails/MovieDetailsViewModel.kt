@@ -14,16 +14,17 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieByIdUseCase: GetMovieByIdUseCase,
 ): ViewModel() {
 
-    private val _movies: MutableStateFlow<ResourceState<Movie>> = MutableStateFlow(ResourceState.Loading)
-    val movies = _movies.asStateFlow()
+    private val _movie: MutableStateFlow<ResourceState<Movie>> = MutableStateFlow(ResourceState.Loading)
+    val movie = _movie.asStateFlow()
 
     fun getMovieById(id: Int){
         viewModelScope.launch {
             getMovieByIdUseCase(
                 id = id
             ).onSuccess {
-                _movies.emit(ResourceState.Content(it))
+                _movie.emit(ResourceState.Content(it))
             }.onFailure {
+                _movie.emit(ResourceState.Error())
             }
         }
     }
