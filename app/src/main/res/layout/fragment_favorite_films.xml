@@ -9,6 +9,17 @@
     android:layout_height="match_parent">
 
     <include
+        android:id="@+id/no_connection_error"
+        layout="@layout/no_connecion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
         android:id="@+id/main_fragment_toolbar"
         layout="@layout/main_fragment_toolbar"
         android:layout_width="match_parent"

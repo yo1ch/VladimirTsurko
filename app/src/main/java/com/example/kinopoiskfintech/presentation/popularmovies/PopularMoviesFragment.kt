@@ -50,12 +50,18 @@ class PopularMoviesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.noConnectionError.retryButton.setOnClickListener {
+            retryLoadData()
+        }
         setupToolbar()
         setupRecyclerView()
         observeViewModel()
     }
 
     private fun observeViewModel() {
+        viewModel.isError.onEach { isError ->
+            if(isError) showNoConnection() else hideNoConnection()
+        }.launchIn(lifecycleScope)
         viewModel.movies
             .onEach { movies ->
                 when (movies) {
@@ -107,6 +113,11 @@ class PopularMoviesFragment :
         }
     }
 
+    private fun retryLoadData(){
+        hideNoConnection()
+        viewModel.reloadMovies()
+    }
+
     private fun showSearch() {
         with(binding.mainFragmentToolbar) {
             searchView.visibility = ViewPager2.VISIBLE
@@ -148,7 +159,6 @@ class PopularMoviesFragment :
             notFound.visibility = VISIBLE
         }
     }
-
     private fun hideNotFound(){
         with(binding){
             rvPopular.visibility = VISIBLE
@@ -156,6 +166,16 @@ class PopularMoviesFragment :
         }
     }
 
+    private fun showNoConnection(){
+        binding.noConnectionError.noConnectionError.visibility = VISIBLE
+        binding.rvPopular.visibility = GONE
+        loadingStateListener.onLoadingEnd()
+    }
+
+    private fun hideNoConnection(){
+        binding.noConnectionError.noConnectionError.visibility = GONE
+        binding.rvPopular.visibility = VISIBLE
+    }
 
     companion object {
         const val FRAGMENT_ID = 0

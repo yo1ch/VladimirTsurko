@@ -8,7 +8,9 @@ import com.example.kinopoiskfintech.domain.usecase.GetAllPopularMoviesUseCase
 import com.example.kinopoiskfintech.domain.usecase.GetPopularMoviesByQueryUseCase
 import com.example.kinopoiskfintech.domain.usecase.LoadPopularMoviesUseCase
 import com.example.kinopoiskfintech.utils.ResourceState
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,7 +20,7 @@ import javax.inject.Inject
 
 class PopularMoviesViewModel @Inject constructor(
     private val loadPopularMoviesUseCase: LoadPopularMoviesUseCase,
-    private val getAllPopularMoviesUseCase: GetAllPopularMoviesUseCase,
+    getAllPopularMoviesUseCase: GetAllPopularMoviesUseCase,
     private val changeMovieFavouriteStatusUseCase: ChangeMovieFavouriteStatusUseCase,
     private val getPopularMoviesByQueryUseCase: GetPopularMoviesByQueryUseCase,
 ) : ViewModel() {
@@ -31,6 +33,9 @@ class PopularMoviesViewModel @Inject constructor(
     private val _moviesByQuery: MutableStateFlow<List<Movie>> =
         MutableStateFlow(emptyList())
     val moviesByQuery = _moviesByQuery.asStateFlow()
+
+    private val _isError: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val isError = _isError.asSharedFlow()
 
     init {
         getMovies()
@@ -59,8 +64,19 @@ class PopularMoviesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 loadPopularMoviesUseCase()
-            }catch (e: Exception){
+            } catch (e: Exception) {
+                _isError.emit(true)
+            }
+        }
+    }
 
+    fun reloadMovies(){
+        viewModelScope.launch {
+            _movies.emit(ResourceState.Loading)
+            try {
+                loadPopularMoviesUseCase()
+            } catch (e: Exception) {
+                _isError.emit(true)
             }
         }
     }

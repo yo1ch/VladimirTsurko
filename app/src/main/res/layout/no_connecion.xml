@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/no_connection_error"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/star_image"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/primary"
+        android:src="@drawable/ic_no_connection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/toolbar_title"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/no_connection_title"
+        android:textColor="@color/primary"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/star_image"
+        app:layout_constraintStart_toStartOf="@+id/star_image"
+        app:layout_constraintTop_toBottomOf="@+id/star_image" />
+
+    <TextView
+        android:id="@+id/retry_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/button_background_selector"
+        android:elevation="0dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/retry_titlle"
+        android:textColor="@drawable/button_text_selector"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar_title"
+        app:layout_constraintStart_toStartOf="@+id/toolbar_title"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
