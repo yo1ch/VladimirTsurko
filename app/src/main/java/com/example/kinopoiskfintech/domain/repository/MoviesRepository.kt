@@ -13,4 +13,7 @@ interface MoviesRepository {
 
     fun getFavouriteMovies(): Flow<List<Movie>>
 
+    suspend fun getFavouriteMoviesByQuery(query: String): List<Movie>
+    suspend fun getPopularMoviesByQuery(query: String): List<Movie>
+
 }

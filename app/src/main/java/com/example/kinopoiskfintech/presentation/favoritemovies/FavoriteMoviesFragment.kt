@@ -57,14 +57,30 @@ class FavoriteMoviesFragment :
     private fun observeViewModel() {
         viewModel.movies
             .onEach { movies ->
-                when(movies){
-                    is ResourceState.Loading -> { loadingStateListener.onLoadingStart() }
-                    is ResourceState.Error -> { loadingStateListener.onLoadingEnd() }
+                when (movies) {
+                    is ResourceState.Loading -> {
+                        loadingStateListener.onLoadingStart()
+                    }
+
+                    is ResourceState.Error -> {
+                        loadingStateListener.onLoadingEnd()
+                    }
+
                     is ResourceState.Content -> {
                         loadingStateListener.onLoadingEnd()
                         filmsAdapter.submitList(movies.content)
                     }
                 }
+            }.launchIn(lifecycleScope)
+    }
+
+    private fun observeMoviesByQuery() {
+        viewModel.moviesByQuery
+            .onEach { movies ->
+                if (movies.isNotEmpty()) {
+                    hideNotFound()
+                    filmsAdapter.submitList(movies)
+                }else showNotFound()
             }.launchIn(lifecycleScope)
     }
 
@@ -102,20 +118,41 @@ class FavoriteMoviesFragment :
         with(binding.mainFragmentToolbar) {
             toolbarTitle.text = FRAGMENT_TITLE
             starImage.setOnClickListener {
+                observeMoviesByQuery()
                 showSearch()
             }
             backImage.setOnClickListener {
+                when (val res = viewModel.movies.value) {
+                    is ResourceState.Content -> filmsAdapter.submitList(res.content)
+                    else -> {}
+                }
+                hideNotFound()
                 hideSearch()
             }
             searchView
                 .getQueryChangeFlow()
-                .debounce(1500)
+                .debounce(500)
                 .onEach { query ->
-
+                    viewModel.getFavouriteByQuery(query)
                 }.launchIn(lifecycleScope)
 
         }
     }
+
+    private fun showNotFound(){
+        with(binding){
+            rvFavorite.visibility = View.GONE
+            notFound.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideNotFound(){
+        with(binding){
+            rvFavorite.visibility = View.VISIBLE
+            notFound.visibility = View.GONE
+        }
+    }
+
     companion object {
         const val FRAGMENT_ID = 1
         const val FRAGMENT_TITLE = "Избранное"

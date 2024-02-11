@@ -33,4 +33,10 @@ interface MoviesDao {
     @Query("SELECT EXISTS (SELECT * FROM $FAVOURITE_TABLE WHERE filmId=:filmId)")
     suspend fun isFilmFavourite(filmId: Int): Boolean
 
+    @Query("SELECT * FROM $FAVOURITE_TABLE WHERE nameRu LIKE '%' || :query || '%' AND isFavorite=1")
+    suspend fun getFavouriteFilmsByQuery(query: String): List<MovieDbModel>
+
+    @Query("SELECT * FROM $FAVOURITE_TABLE WHERE nameRu LIKE '%' || :query || '%'")
+    suspend fun getPopularFilmsByQuery(query: String): List<MovieDbModel>
+
 }

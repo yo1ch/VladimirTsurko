@@ -3,6 +3,8 @@ package com.example.kinopoiskfintech.presentation.popularmovies
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -73,6 +75,16 @@ class PopularMoviesFragment :
             }.launchIn(lifecycleScope)
     }
 
+    private fun observeMoviesByQuery() {
+        viewModel.moviesByQuery
+            .onEach { movies ->
+                if(movies.isNotEmpty()){
+                    hideNotFound()
+                    filmsAdapter.submitList(movies)
+                }else showNotFound()
+            }.launchIn(lifecycleScope)
+    }
+
     private fun setupRecyclerView() {
         binding.rvPopular.adapter = filmsAdapter
         filmsAdapter.onFilmItemClickListener = { movieId ->
@@ -85,6 +97,7 @@ class PopularMoviesFragment :
             viewModel.getMovies()
         }
     }
+
     private fun hideSearch() {
         with(binding.mainFragmentToolbar) {
             searchView.visibility = ViewPager2.GONE
@@ -108,18 +121,38 @@ class PopularMoviesFragment :
         with(binding.mainFragmentToolbar) {
             toolbarTitle.text = FRAGMENT_TITLE
             starImage.setOnClickListener {
+                observeMoviesByQuery()
                 showSearch()
             }
             backImage.setOnClickListener {
+                when (val res = viewModel.movies.value) {
+                    is ResourceState.Content -> filmsAdapter.submitList(res.content)
+                    else -> {}
+                }
                 hideSearch()
+                hideNotFound()
             }
             searchView
                 .getQueryChangeFlow()
-                .debounce(1500)
+                .debounce(500)
                 .onEach { query ->
-
+                    viewModel.getMoviesByQuery(query)
                 }.launchIn(lifecycleScope)
 
+        }
+    }
+
+    private fun showNotFound(){
+        with(binding){
+            rvPopular.visibility = GONE
+            notFound.visibility = VISIBLE
+        }
+    }
+
+    private fun hideNotFound(){
+        with(binding){
+            rvPopular.visibility = VISIBLE
+            notFound.visibility = GONE
         }
     }
 

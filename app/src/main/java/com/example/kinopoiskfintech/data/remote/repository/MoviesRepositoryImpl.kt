@@ -48,6 +48,18 @@ class MoviesRepositoryImpl @Inject constructor(
             dbModels.map { it.toModel() }
         }
 
+    override suspend fun getFavouriteMoviesByQuery(query: String): List<Movie> {
+        return moviesDao.getFavouriteFilmsByQuery(query).map {
+            it.toModel()
+        }
+    }
+
+    override suspend fun getPopularMoviesByQuery(query: String): List<Movie> {
+        return moviesDao.getPopularFilmsByQuery(query).map {
+            it.toModel()
+        }
+    }
+
     override fun getMovies(): Flow<List<Movie>> =
         moviesDao.getAllPopularFilms().map { dbModels ->
             dbModels.map { it.toModel() }
