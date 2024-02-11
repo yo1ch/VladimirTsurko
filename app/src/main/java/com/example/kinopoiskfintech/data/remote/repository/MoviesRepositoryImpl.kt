@@ -2,6 +2,7 @@ package com.example.kinopoiskfintech.data.remote.repository
 
 import com.example.kinopoiskfintech.data.local.MoviesDao
 import com.example.kinopoiskfintech.data.mappers.toDbModel
+import com.example.kinopoiskfintech.data.mappers.toDescriptionDnModel
 import com.example.kinopoiskfintech.data.remote.MoviesApi
 import com.example.kinopoiskfintech.data.mappers.toModel
 import com.example.kinopoiskfintech.domain.models.Movie
@@ -19,16 +20,26 @@ class MoviesRepositoryImpl @Inject constructor(
     private var currentPage = FIRST_PAGE
 
     override suspend fun getMovieById(id: Int): Result<Movie> {
-        val response = moviesApi.getMovieById(id)
-        return response.toResult().map { movieResponse ->
-            movieResponse.toModel()
-        }
+        val movies = moviesDao.getDescriptionById(id)
+        return if (movies.isEmpty()) {
+            val response = moviesApi.getMovieById(id)
+            response.toResult().map { movieResponse ->
+                moviesDao.insertMovieDescription(movieResponse.toDescriptionDnModel())
+                movieResponse.toModel()
+            }
+        } else Result.success(movies.first().toModel())
+
+
     }
 
     override suspend fun changeMovieFavouriteStatus(movie: Movie) {
         when (movie.isFavourite) {
-            true -> moviesDao.removeFilmFromFavourite(movie.filmId)
-            false -> moviesDao.insertFilmToFavourite(movie.toDbModel())
+            true -> moviesDao.removeFilmFromFavourite(
+                movie.toDbModel().copy(isFavorite = false)
+            )
+            false -> moviesDao.insertFilmToFavourite(
+                movie.toDbModel().copy(isFavorite = true)
+            )
         }
     }
 
@@ -37,16 +48,26 @@ class MoviesRepositoryImpl @Inject constructor(
             dbModels.map { it.toModel() }
         }
 
-    override suspend fun getPopularMovies(): Result<List<Movie>> {
-        val page = if(currentPage < LAST_PAGE) currentPage++ else currentPage
+    override fun getMovies(): Flow<List<Movie>> =
+        moviesDao.getAllPopularFilms().map { dbModels ->
+            dbModels.map { it.toModel() }
+        }
+
+    override suspend fun loadPopularMovies(){
+        val page = if (currentPage < LAST_PAGE) currentPage++ else currentPage
         val response = moviesApi.getTopPopularMovies(page)
-        return response.toResult().map { movieResponse ->
-            movieResponse.films.map {
-                it.toModel(moviesDao.isFilmFavourite(it.filmId))
+        if (response.isSuccessful) {
+            response.body()?.films
+            ?.map {
+                it.toDbModel()
+            }
+            ?.let {
+                moviesDao.insertFilmsToFavourite(it)
             }
         }
     }
-    companion object{
+
+    companion object {
         private const val FIRST_PAGE = 1
         private const val LAST_PAGE = 5
     }

@@ -1,6 +1,7 @@
 package com.example.kinopoiskfintech.data.mappers
 
 import com.example.kinopoiskfintech.data.local.models.MovieDbModel
+import com.example.kinopoiskfintech.data.local.models.MovieDescriptionDbModel
 import com.example.kinopoiskfintech.domain.models.Movie
 import com.spinoza.moviesforfintech.data.network.model.CountryDto
 import com.spinoza.moviesforfintech.data.network.model.GenreDto
@@ -21,18 +22,15 @@ fun MovieDto.toModel() = Movie(
         isFavourite =true,
     )
 
-fun MoviePreviewDto.toModel(
-    isFavorite: Boolean
-): Movie = Movie(
+fun MovieDto.toDescriptionDnModel() = MovieDescriptionDbModel(
     filmId = filmId,
     nameRu = nameRu,
     year = year,
     countries = countriesToString(countries),
     genres = genresToString(genres),
-    posterUrlPreview = posterUrlPreview,
     posterUrl = posterUrl,
-    description = String(),
-    isFavourite = isFavorite
+    posterUrlPreview = posterUrlPreview,
+    description = description,
 )
 
 fun Movie.toDbModel(): MovieDbModel = MovieDbModel(
@@ -43,7 +41,18 @@ fun Movie.toDbModel(): MovieDbModel = MovieDbModel(
     genres = genres,
     posterUrl = posterUrl,
     posterUrlPreview = posterUrlPreview,
-    description = description
+    isFavorite = isFavourite,
+)
+
+fun MoviePreviewDto.toDbModel(): MovieDbModel = MovieDbModel(
+    filmId = filmId,
+    nameRu = nameRu,
+    year = year,
+    countries = countriesToString(countries),
+    genres = genresToString(genres),
+    posterUrl = posterUrl,
+    posterUrlPreview = posterUrlPreview,
+    isFavorite = false
 )
 
 fun MovieDbModel.toModel(): Movie = Movie(
@@ -54,8 +63,19 @@ fun MovieDbModel.toModel(): Movie = Movie(
     genres = genres,
     posterUrl = posterUrl,
     posterUrlPreview = posterUrlPreview,
+    description = "",
+    isFavourite = isFavorite
+)
+
+fun MovieDescriptionDbModel.toModel(): Movie = Movie(
+    filmId = filmId,
+    nameRu = nameRu,
+    year = year,
+    countries = countries,
+    genres = genres,
+    posterUrl = posterUrl,
+    posterUrlPreview = posterUrlPreview,
     description = description,
-    isFavourite = true
 )
 private fun countriesToString(
     countriesDto: List<CountryDto>

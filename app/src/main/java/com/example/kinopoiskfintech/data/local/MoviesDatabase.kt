@@ -6,11 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.kinopoiskfintech.data.local.DatabaseConstants.DATABASE_NAME
 import com.example.kinopoiskfintech.data.local.models.MovieDbModel
+import com.example.kinopoiskfintech.data.local.models.MovieDescriptionDbModel
 
-@Database(entities = [MovieDbModel::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+        MovieDbModel::class,
+        MovieDescriptionDbModel::class,
+    ], version = 1, exportSchema = false
+)
 abstract class MoviesDatabase : RoomDatabase() {
 
     abstract fun moviesDao(): MoviesDao
+
     companion object {
         private var db: MoviesDatabase? = null
         private val LOCK = Any()

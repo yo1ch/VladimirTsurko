@@ -4,21 +4,33 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.kinopoiskfintech.data.local.DatabaseConstants.DESCRIPTION_TABLE
 import com.example.kinopoiskfintech.data.local.DatabaseConstants.FAVOURITE_TABLE
 import com.example.kinopoiskfintech.data.local.models.MovieDbModel
+import com.example.kinopoiskfintech.data.local.models.MovieDescriptionDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MoviesDao {
-    @Query("SELECT * FROM $FAVOURITE_TABLE")
+    @Query("SELECT * FROM $FAVOURITE_TABLE WHERE isFavorite=1")
     fun getAllFavouriteFilms(): Flow<List<MovieDbModel>>
+    @Query("SELECT * FROM $FAVOURITE_TABLE")
+    fun getAllPopularFilms(): Flow<List<MovieDbModel>>
+    @Query("SELECT * FROM $FAVOURITE_TABLE WHERE filmId=:filmId")
+    suspend fun getMovieById(filmId: Int): MovieDbModel
+
+    @Query("SELECT * FROM $DESCRIPTION_TABLE WHERE filmId=:filmId")
+    suspend fun getDescriptionById(filmId: Int): List<MovieDescriptionDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMovieDescription(film: MovieDescriptionDbModel)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFilmToFavourite(film: MovieDbModel)
-
-    @Query("DELETE FROM $FAVOURITE_TABLE WHERE filmId=:filmId")
-    suspend fun removeFilmFromFavourite(filmId: Int)
-
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFilmsToFavourite(filmsList: List<MovieDbModel>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun removeFilmFromFavourite(film: MovieDbModel)
     @Query("SELECT EXISTS (SELECT * FROM $FAVOURITE_TABLE WHERE filmId=:filmId)")
     suspend fun isFilmFavourite(filmId: Int): Boolean
+
 }

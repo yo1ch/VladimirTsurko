@@ -1,11 +1,9 @@
 package com.example.kinopoiskfintech.presentation.adapter
 
 import android.view.LayoutInflater
-import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.example.kinopoiskfintech.databinding.MovieItemBinding
@@ -42,7 +40,6 @@ class MovieListAdapter @Inject constructor() :
                 onFilmItemClickListener?.invoke(film.filmId)
             }
             root.setOnLongClickListener {
-                starImage.visibility = if(starImage.isVisible) GONE else VISIBLE
                 onFilmItemLongClickListener?.invoke(film)
                 true
             }
