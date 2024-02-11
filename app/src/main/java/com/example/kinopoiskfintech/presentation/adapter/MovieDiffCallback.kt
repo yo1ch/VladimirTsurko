@@ -11,4 +11,13 @@ class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
     override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
         return oldItem == newItem
     }
+
+    override fun getChangePayload(oldItem: Movie, newItem: Movie): Any? {
+        return when {
+            oldItem.isFavourite != newItem.isFavourite -> {
+                FavouriteChangePayload(newItem.isFavourite)
+            }
+            else -> super.getChangePayload(oldItem, newItem)
+        }
+    }
 }

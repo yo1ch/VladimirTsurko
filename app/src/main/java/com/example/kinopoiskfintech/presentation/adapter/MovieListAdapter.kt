@@ -1,11 +1,8 @@
 package com.example.kinopoiskfintech.presentation.adapter
 
 import android.view.LayoutInflater
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.bumptech.glide.Glide
 import com.example.kinopoiskfintech.databinding.MovieItemBinding
 import com.example.kinopoiskfintech.domain.models.Movie
 import javax.inject.Inject
@@ -26,21 +23,26 @@ class MovieListAdapter @Inject constructor() :
         return MovieViewHolder(binding)
     }
 
+    override fun onBindViewHolder(
+        holder: MovieViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        when (val latestPayload = payloads.lastOrNull()) {
+            is FavouriteChangePayload -> holder.bindFavouriteState(latestPayload.isFavourite)
+            else -> onBindViewHolder(holder, position)
+        }
+    }
+
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val film = getItem(position)
+        val movie = getItem(position)
         with(holder.binding) {
-            Glide.with(root).load(film.posterUrlPreview).into(posterImage)
-            tvName.text = film.nameRu
-            tvGenre.text = String.format("%s (%s)", film.genres, film.year)
-            when (film.isFavourite) {
-                true -> starImage.visibility = VISIBLE
-                false -> starImage.visibility = INVISIBLE
-            }
+            holder.bind(movie)
             root.setOnClickListener {
-                onFilmItemClickListener?.invoke(film.filmId)
+                onFilmItemClickListener?.invoke(movie.filmId)
             }
             root.setOnLongClickListener {
-                onFilmItemLongClickListener?.invoke(film)
+                onFilmItemLongClickListener?.invoke(movie)
                 true
             }
             if (position >= itemCount - 10) {
