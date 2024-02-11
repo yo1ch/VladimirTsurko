@@ -131,4 +131,14 @@ class MovieDetailsFragment :
     private fun navigateBack() {
         findNavController().popBackStack()
     }
+    companion object{
+
+        private const val ID_PARAM_KEY = "movieId"
+        fun newInstance(movieId: Int,) =
+            MovieDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ID_PARAM_KEY, movieId)
+                }
+            }
+    }
 }

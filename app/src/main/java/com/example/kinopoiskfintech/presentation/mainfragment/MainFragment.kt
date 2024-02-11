@@ -2,15 +2,19 @@ package com.example.kinopoiskfintech.presentation.mainfragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2.GONE
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import androidx.viewpager2.widget.ViewPager2.VISIBLE
+import com.example.kinopoiskfintech.R
 import com.example.kinopoiskfintech.databinding.FragmentMainBinding
 import com.example.kinopoiskfintech.presentation.BaseFragment
 import com.example.kinopoiskfintech.presentation.mainfragment.listeners.ListItemClickListener
 import com.example.kinopoiskfintech.presentation.favoritemovies.FavoriteMoviesFragment
 import com.example.kinopoiskfintech.presentation.mainfragment.listeners.LoadingStateListener
+import com.example.kinopoiskfintech.presentation.moviedetails.MovieDetailsFragment
 import com.example.kinopoiskfintech.presentation.popularmovies.PopularMoviesFragment
 
 
@@ -18,6 +22,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     ListItemClickListener, LoadingStateListener {
 
     private lateinit var pagerAdapter: MainFragmentPagerAdapter
+    private var detailsFragmentContainer: FragmentContainerView? = null
 
 
     override fun onStart() {
@@ -28,6 +33,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        detailsFragmentContainer = binding.detailsFragmentContainer
         setupViewPager()
     }
 
@@ -74,7 +80,19 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         }
     }
     override fun onMovieClick(movieId: Int) {
-        findNavController().navigate(MainFragmentDirections.actionMovieDetails(movieId))
+        if(detailsFragmentContainer == null){
+            findNavController().navigate(MainFragmentDirections.actionMovieDetails(movieId))
+        }else{
+            launchFragment(
+                MovieDetailsFragment.newInstance(movieId)
+            )
+        }
+    }
+
+    private fun launchFragment(fragment: Fragment){
+        childFragmentManager.beginTransaction()
+            .replace(R.id.details_fragment_container, fragment)
+            .commit()
     }
 
     override fun onLoadingStart() {
